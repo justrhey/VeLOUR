@@ -1,0 +1,509 @@
+@import "tailwindcss";
+
+/* ===========================================================================
+   VÉLOUR — Editorial / Exaggerated-Minimalism system
+   Black & gold · solid surfaces · NO glassmorphism · kinetic motion
+=========================================================================== */
+@theme {
+  /* Surfaces — layered, opaque (depth comes from value + hairlines, not blur).
+     Editorial zones (panel) are a perceptibly lighter warm-dark so the wave
+     dividers read as a real step against the noir showcase zone. */
+  --color-noir: #08080a;
+  --color-panel: #18141d;
+  --color-panel-2: #221c28;
+  --color-ink: #1c1917;
+
+  /* Gold ramp */
+  --color-gold: #c8a24b;
+  --color-gold-bright: #ecd089;
+  --color-gold-deep: #9a7322;
+
+  /* Wine + accent support */
+  --color-wine: #5b0e2d;
+
+  /* Text */
+  --color-cream: #f6f1e7;
+  --color-cream-dim: #b3aa9a;
+  --color-cream-mute: #6b655b;
+
+  /* Lines */
+  --color-hairline: rgba(246, 241, 231, 0.12);
+  --color-gold-line: rgba(200, 162, 75, 0.45);
+
+  --font-display: var(--font-display);
+  --font-serif: var(--font-serif);
+  --font-mono: var(--font-mono);
+
+  /* Editorial radius: near-sharp */
+  --radius-card: 3px;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-noir);
+  color: var(--color-cream);
+  -webkit-font-smoothing: antialiased;
+  /* clip (not hidden) so we don't turn <body> into a scroll container */
+  overflow-x: clip;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ---------- Typography ---------- */
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+}
+.font-mono {
+  font-family: var(--font-mono), ui-monospace, monospace;
+}
+
+/* Oversized statement type */
+.display-xl {
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 900;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+}
+
+/* Mono eyebrow / kicker with index rule */
+.kicker {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.kicker::before {
+  content: "";
+  width: 2.2rem;
+  height: 1px;
+  background: linear-gradient(90deg, var(--color-gold), transparent);
+}
+
+.section-index {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  color: var(--color-cream-mute);
+}
+
+/* Gilded foil text */
+.text-gilded {
+  background: linear-gradient(
+    100deg,
+    var(--color-gold-deep) 0%,
+    var(--color-gold-bright) 38%,
+    var(--color-cream) 55%,
+    var(--color-gold-bright) 72%,
+    var(--color-gold-deep) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---------- Solid editorial surfaces (replaces glass) ---------- */
+.panel {
+  position: relative;
+  background: linear-gradient(180deg, var(--color-panel-2), var(--color-panel));
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-card);
+  box-shadow:
+    0 1px 0 rgba(246, 241, 231, 0.04) inset,
+    0 30px 60px -30px rgba(0, 0, 0, 0.9);
+  overflow: hidden;
+}
+.panel-gold {
+  border-color: var(--color-gold-line);
+}
+/* gold sheen sweep on hover */
+.panel-hover {
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1), border-color 280ms ease;
+}
+.panel-hover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(236, 208, 137, 0.12) 48%,
+    transparent 66%
+  );
+  transform: translateX(-120%);
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.panel-hover:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-gold-line);
+}
+.panel-hover:hover::after {
+  transform: translateX(120%);
+}
+
+/* ---------- Buttons ---------- */
+.btn-gold {
+  --b: 0;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--color-gold);
+  color: #14100a;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+  padding: 0.95rem 1.7rem;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  cursor: pointer;
+  transition: color 250ms ease;
+  isolation: isolate;
+}
+.btn-gold::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-cream);
+  transform: scaleX(var(--b));
+  transform-origin: left;
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.btn-gold:hover {
+  --b: 1;
+}
+.btn-gold .arr {
+  transition: transform 250ms ease;
+}
+.btn-gold:hover .arr {
+  transform: translateX(4px);
+}
+.btn-gold:active {
+  transform: translateY(1px);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  border: 1px solid var(--color-gold-line);
+  color: var(--color-cream);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.95rem 1.7rem;
+  border-radius: var(--radius-card);
+  cursor: pointer;
+  transition: background 250ms ease, border-color 250ms ease, color 250ms ease;
+}
+.btn-ghost:hover {
+  background: var(--color-gold);
+  color: #14100a;
+  border-color: var(--color-gold);
+}
+
+/* ---------- Animated link underline ---------- */
+.link-line {
+  position: relative;
+}
+.link-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 1px;
+  background: var(--color-gold);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.link-line:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ---------- Focus / skip ---------- */
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-gold-bright);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.skip-link {
+  position: absolute;
+  left: 50%;
+  top: -100px;
+  transform: translateX(-50%);
+  background: var(--color-gold);
+  color: #14100a;
+  padding: 0.6rem 1.2rem;
+  font-family: var(--font-mono), monospace;
+  font-weight: 500;
+  z-index: 200;
+  transition: top 200ms ease;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* ---------- Marquee ---------- */
+.marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}
+.marquee-slow {
+  animation-duration: 46s;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---------- Animated wave surface ---------- */
+.wave-animated {
+  animation: wave-surface 5s ease-in-out infinite;
+}
+@keyframes wave-surface {
+  0%, 100% { transform: translateY(-48%) translateX(0) rotate(0deg); }
+  25% { transform: translateY(-48%) translateX(-8px) rotate(-0.4deg); }
+  50% { transform: translateY(-48%) translateX(0) rotate(0deg); }
+  75% { transform: translateY(-48%) translateX(6px) rotate(0.3deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wave-animated {
+    animation: none;
+  }
+}
+
+/* ---------- Wave drift ---------- */
+.wave-drift {
+  animation: wavedrift 14s ease-in-out infinite alternate;
+}
+@keyframes wavedrift {
+  to {
+    transform: translateX(-60px);
+  }
+}
+.wave-drift-2 {
+  animation: wavedrift2 18s ease-in-out infinite alternate;
+}
+@keyframes wavedrift2 {
+  to {
+    transform: translateX(42px);
+  }
+}
+/* third internal current — slow counter-drift for swirling depth */
+.wave-drift-slow {
+  animation: wavedriftslow 26s ease-in-out infinite alternate;
+}
+@keyframes wavedriftslow {
+  to {
+    transform: translateX(-30px);
+  }
+}
+
+
+
+/* ---------- Kinetic line-mask reveal (hero) ---------- */
+.line-mask {
+  display: block;
+  overflow: hidden;
+}
+.line-mask > span {
+  display: block;
+  transform: translateY(110%);
+  transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-ready .in .line-mask > span,
+.reveal-ready .line-mask.in > span {
+  transform: translateY(0);
+}
+
+/* ---------- Scroll reveal ---------- */
+.reveal-ready .reveal {
+  opacity: 0;
+  transform: translateY(28px);
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 800ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 800ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-ready .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .line-mask > span {
+    transform: none !important;
+  }
+  .marquee,
+  .wave-animated,
+  .wave-drift,
+  .wave-drift-2,
+  .wave-drift-slow,
+  .winecard-inner,
+  .winecard-enter svg {
+    animation: none !important;
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+/* ---------- Lenis smooth scroll ---------- */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ---------- Wine "calling card" intro ---------- */
+.winecard-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: grid;
+  place-items: center;
+  background: var(--color-noir);
+  will-change: transform;
+  transition: transform 950ms cubic-bezier(0.76, 0, 0.24, 1);
+}
+.winecard-overlay.is-out {
+  transform: translateY(-101%);
+}
+.winecard-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6rem;
+  padding: 1.5rem;
+  animation: cardin 800ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes cardin {
+  from {
+    opacity: 0;
+    transform: translateY(22px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.winecard-kicker {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-cream-mute);
+}
+.winecard {
+  width: min(76vw, 440px);
+  aspect-ratio: 1;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px var(--color-gold-line),
+    0 44px 90px -34px rgba(0, 0, 0, 0.95);
+}
+.winecard img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.winecard-enter {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-cream-dim);
+  cursor: pointer;
+  transition: color 200ms ease;
+}
+.winecard-enter:hover {
+  color: var(--color-gold);
+}
+.winecard-enter svg {
+  animation: nudge 1.6s ease-in-out infinite;
+}
+@keyframes nudge {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(5px);
+  }
+}
+
+/* ---------- Film grain + vignette ---------- */
+.grain-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  pointer-events: none;
+}
+.grain {
+  position: absolute;
+  inset: -60%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.05;
+  mix-blend-mode: soft-light;
+  animation: grain 0.55s steps(2) infinite;
+}
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-6%, 4%); }
+  50% { transform: translate(4%, -6%); }
+  75% { transform: translate(-4%, -4%); }
+  100% { transform: translate(6%, 6%); }
+}
+.vignette-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 95% at 50% 42%, transparent 55%, rgba(0, 0, 0, 0.5) 100%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .grain {
+    animation: none !important;
+  }
+}
